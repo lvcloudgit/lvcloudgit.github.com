@@ -2,34 +2,35 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
-  <title>Archives: 2014 | Hexo</title>
-  <meta name="author" content="John Doe">
+  <title>归档：2014 | Always lost</title>
+  <meta name="author" content="lvcloud">
+  
+  <meta name="description" content="wasting life">
   
   
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   
-  <meta property="og:site_name" content="Hexo"/>
+  <meta property="og:site_name" content="Always lost"/>
 
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  <link href="/favicon.png" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  <link rel="alternate" href="/atom.xml" title="Always lost" type="application/atom+xml">
   <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
   
 </head>
 
 
 <body>
-  <header id="header" class="inner"><div class="alignleft">
-  <h1><a href="/">Hexo</a></h1>
-  <h2><a href="/"></a></h2>
+  <div class="wrapper">
+    <header id="header"><div class="title">
+  <h1><a href="/">Always lost</a></h1>
+  <p><a href="/">Never forget</a></p>
 </div>
-<nav id="main-nav" class="alignright">
+<nav class="nav">
   <ul>
     
       <li><a href="/">Home</a></li>
@@ -40,109 +41,282 @@
   <div class="clearfix"></div>
 </nav>
 <div class="clearfix"></div></header>
-  <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
+    <div class="content">
 <h2 class="archive-title">2014</h2>
 
 
   
     <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-03T17:11:46.000Z"><a href="/2014/03/04/终于搞定了算是吧/">3月 4 2014</a></time>
+    
+    
   
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-03T16:01:40.000Z"><a href="/2014/03/04/非常不舒服！/">Mar 4 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/04/非常不舒服！/">非常不舒服！</a></h1>
+    <h1 class="title"><a href="/2014/03/04/终于搞定了算是吧/">终于搞定了...算是吧...</a></h1>
   
 
-    </header>
-    <div class="entry">
-      
-        <p>每次deploy都要输入帐号密码，烦死了，找了半天也不知道怎么弄这东西。
-这种谢耳朵专用产品果然是不适合我这种麻瓜。</p>
+  </header>
+  
+  <div class="entry">
+    
+      <p>折腾了一晚上，真tm累了。我还有好多工作要做啊，为什么非要弄这个博客不可呢？？？<img src="http://file1.u148.net/images/2010/7/1278378088531.gif" alt="NND！"></p>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
+    
   </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
 </article>
-
-
-
-  
-    <article class="mypost">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-03-03T15:50:18.000Z"><a href="/2014/03/03/test-article/">Mar 3 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/03/03/test-article/">test article</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="-">试试好用不</h2>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
 
 
   
     <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-03T16:35:46.000Z"><a href="/2014/03/04/C#中的结构/">3月 4 2014</a></time>
+    
+    
   
-  <div class="post-content">
-    <header>
+    <h1 class="title"><a href="/2014/03/04/C#中的结构/">C#中的结构</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h1 id="-">结构</h1>
+<h2 id="-">问题一：什么是结构？</h2>
+<p>结构（struct）是自定义的一种数据类型，与类（class）很相似，具有数据成员和函数成员。
+结构与类的区别是：</p>
+<ul>
+<li><strong>类</strong>是引用类型，<strong>结构</strong>是值类型；</li>
+<li>结构是隐式的、密封的，因此不能像类那样被派生。</li>
+</ul>
+<p>声明结构的语法与声明类相似：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">struct</span> StructName
+{
+MemberDeclarations
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">值类型的结构</h2>
+<p>既然是值类型，那么结构变量就含有自己的数据，因此：</p>
+<ul>
+<li>结构类型的变量不能为null；</li>
+<li>两个结构变量不能引用同一对象。</li>
+</ul>
+<p>对比结构和类的代码：
+类的声明：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>class DemoClass
+{
+<span class="keyword">public</span> <span class="keyword">int</span> x;
+<span class="keyword">public</span> <span class="keyword">int</span> y;
+ }
+</pre></td></tr></table></figure>
+
+<p>结构的声明：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="keyword">struct</span> DemoStruct
+{
+<span class="keyword">public</span> x;
+<span class="keyword">public</span> y;
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">给结构赋值</h2>
+<pre><code>class2 = class1；
+</code></pre><p>上面这个给类赋值的语句，只是复制了数值的引用，即这样赋值以后，class1和class2这两个引用，都是指向堆中的相同对象。而像下面这样给结构赋值的话：</p>
+<pre><code>struct2 = struct1;
+</code></pre><p>struct1的数值会直接复制到struct2中，此时在栈中存在struct1和struct2两个内容相同但各自完全独立的对象。</p>
+<h2 id="-">结构类型的构造函数</h2>
+<p>结构，可以有实例构造函数，也可以有静态构造函数，但是不允许有析构函数。</p>
+<h3 id="-">实例构造函数</h3>
+<p>编译器会隐式的提供一个默认构造函数，将结构中的每个成员设为该类型的默认值。
+与类不同，如果手动为类创建构造函数，那么隐式的无参数构造函数就无效了。但是结构的默认构造函数不能删除或重定义，即使手动编写结构的构造函数，默认的无参数构造函数仍然有效。
+实例化结构与类一样，要用new语法，例如：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">struct</span> DemoStruct
+{
+    whatever inside;
+}
+<span class="class"><span class="keyword">class</span> <span class="title">Program</span>
+{</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> Main()
+    {
+        DemoStruct s1 = <span class="keyword">new</span> DemoStruct(); <span class="comment">//隐式构造函数</span>
+        DemoStruct s2 = <span class="keyword">new</span> DemoStruct( <span class="number">5</span>, <span class="number">10</span> ); <span class="comment">//自定义构造函数</span>
+    }
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-">静态构造函数</h3>
+<p>结构类型的静态构造函数与类是相同的，静态构造函数创建并初始化静态数据成员，不能引用实例成员。</p>
+<h2 id="-">在结构中不允许使用字段初始化语句</h2>
+<p>例如，下面的语句不能编译通过：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">struct</span> Simple
+{
+    <span class="keyword">public</span> <span class="keyword">int</span> = <span class="number">10</span>;  <span class="comment">//这是不可以的！</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">密封</h2>
+<p>结构是密封的，不允许派生，不支持继承，不能使用以下修饰符：</p>
+<pre><code>protected
+internal
+abstract
+virtual
+</code></pre><p>结构是派生自System.ValueType，而System.ValueType派生自Object。
+可以用于结构成员并与继承相关的关键字是new和override，当创建于结构的基类System.ValueType的成员相同名称的成员时可以使用这两个修饰符。</p>
+<h2 id="-">装箱和拆箱</h2>
+<p>与其它值类型一样，如果要将结构实例作为引用类型的对象，就必须进行装箱。</p>
+<h2 id="-">结构作为返回值和参数</h2>
+<ul>
+<li>当结构作为返回值时，将创建一个副本，从函数成员返回。</li>
+<li>当结构作为值参数时，也是创建一个副本，用于方法执行中。</li>
+<li>把结构作为ref或out参数的话，传入方法的是结构的一个引用，方法可以修改原结构数据成员。</li>
+</ul>
+<h2 id="-">关于结构的其它注意事项</h2>
+<p>如果不打算包含方法，那么可以用结构代替类，因为结构的实例开销比较小。但是要注意装箱和拆箱的代价更大，所以如果需要引用类型，也许还是应该考虑使用类。</p>
+<p>预定义的简单类型，如<code>int</code>、<code>short</code>、<code>long</code>等等，尽管在.Net和C#中被视为原始类型，但其实他们在.Net中都实现为结构。
+可以声明分部结构（使用partial关键字），这与类是相同的。
+与类一样，可以实现<strong>接口</strong>。</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
       
-        <div class="icon"></div>
-        <time datetime="2014-03-03T15:36:02.000Z"><a href="/2014/03/03/hello-world/">Mar 3 2014</a></time>
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-03T16:01:40.000Z"><a href="/2014/03/04/非常不舒服！/">3月 4 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/04/非常不舒服！/">非常不舒服！</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>每次deploy都要输入帐号密码，烦死了，找了半天也不知道怎么弄这东西。
+这种谢耳朵专用产品果然是不适合我这种麻瓜。</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
       
       
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="mypost">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-03T15:50:18.000Z"><a href="/2014/03/03/test-article/">3月 3 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/03/test-article/">test article</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h2 id="-">试试好用不</h2>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-03T15:36:02.000Z"><a href="/2014/03/03/hello-world/">3月 3 2014</a></time>
+    
+    
   
     <h1 class="title"><a href="/2014/03/03/hello-world/">Hello World</a></h1>
   
 
-    </header>
-    <div class="entry">
-      
-        <p>Welcome to <a href="http://zespia.tw/hexo" target="_blank">Hexo</a>! This is your very first post. Check <a href="http://zespia.tw/hexo/docs" target="_blank">documentation</a> to learn how to use.</p>
+  </header>
+  
+  <div class="entry">
+    
+      <p>Welcome to <a href="http://zespia.tw/hexo" target="_blank">Hexo</a>! This is your very first post. Check <a href="http://zespia.tw/hexo/docs" target="_blank">documentation</a> to learn how to use.</p>
 
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
+    
   </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
 </article>
-
 
 
   
@@ -152,28 +326,84 @@
   
   <div class="clearfix"></div>
 </nav>
-</div></div>
-    <aside id="sidebar" class="alignright">
-  <div class="search">
-  <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
-    <input type="hidden" name="q" value="site:yoursite.com">
-  </form>
+
+</div>
+  </div>
+  <div class="widget-wrapper">
+    <aside id="sidebar">
+  
+  
+    
+      
+      
+    
+      
+      
+    
+      
+      
+    
+      
+      
+
+<div class="widget recent-posts first">
+  <h3 class="title">最近的文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/03/04/终于搞定了算是吧/">终于搞定了...算是吧...</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/04/C#中的结构/">C#中的结构</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/04/非常不舒服！/">非常不舒服！</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/03/test-article/">test article</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/03/hello-world/">Hello World</a>
+      </li>
+    
+  </ul>
 </div>
 
-  
+    
+      
+      
 
+<div class="widget blogroll">
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+  
+    
+    <li><a href="http://heroicyang.com/" target="_blank">Heroic Yang&#39;s Blog</a></li>
+  
+  </ul>
+</div>
+
+    
   
 </aside>
-    <div class="clearfix"></div>
+<div class="clearfix"></div>
   </div>
-  <footer id="footer" class="inner"><div class="alignleft">
+  <footer id="footer"><div class="copyright">
   
-  &copy; 2014 John Doe
+  &copy; 2014 <a href="/">lvcloud</a>
   
 </div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
 <div class="clearfix"></div></footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="/js/scale.fix.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 
@@ -183,9 +413,9 @@
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
 <script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
 </script>
 
 </body>
