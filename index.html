@@ -100,85 +100,15 @@
 </code></pre><p><strong>字段、常量</strong></p>
 <pre><code>函数成员（执行代码）
 </code></pre><p><strong>方法、属性、运算符、索引、事件、构造函数、析构函数</strong></p>
-<h2 id="-">类成员修饰符的顺序</h2>
-<p>类成员的声明语句格式如下（无论字段还是方法）：</p>
-<pre><code>[特性] [修饰符] 核心声明
-</code></pre><ul>
-<li>特性：特性必须放在修饰符和声明前面，可以有多个，任意顺序。</li>
-<li>修饰符：修饰符可以有多个，任意顺序。</li>
-</ul>
-<p>方括号中这两部分是可选的。</p>
-<p>例如下面代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>[Serializable]
-public class MyClass
-{
-    <span class="keyword">...</span>
-}
-</pre></td></tr></table></figure>
-
-<p>方括号中的[Serializable]就是特性，public是修饰符。
-例如，<strong>public</strong>和<strong>private</strong>都是修饰符，因此他们的顺序可以随意互换。</p>
-<pre><code>public static int MaxVal;
-static public int MaxVal;
-</code></pre><p>这两句都可以，完全一样。
-所以，字段和方法这两种类成员的声明格式可以总结如下：
-字段声明格式：</p>
-<pre><code>[特性] [修饰符] 类型 字段名称；
-</code></pre><p>方法声明格式：</p>
-<pre><code>[特性] [修饰符] 返回类型 方法名称 (参数列表) { 方法体 }
-</code></pre><h2 id="-">实例类成员和静态类成员</h2>
-<p>类成员可以关联到一个类的实例，也可以关联到类的整体。前者称为实例类成员，后者称为静态类成员。</p>
-<p>所谓实例类成员，就是将类实例化后，这个成员就只属于这个实例化，也就是说这个类的实例拥有每一个实例类成员的副本。</p>
-<h3 id="-">静态字段</h3>
-<p>静态字段被该类的所有实例共享，所有实例都访问同一内存位置，如果该内存的值被改变了，那么对所有实例中的该静态字段来说也都改变了。静态字段用static修饰符声明：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>Class D
-{
-    <span class="keyword">int</span> Val1; <span class="comment">//实例类成员</span>
-    <span class="keyword">static</span> <span class="keyword">int</span> Val2; <span class="comment">//静态类字段</span>
-}
-</pre></td></tr></table></figure>
-
-<p>对于静态成员来说，由于没有对应实例的副本，所以如果从类的外部访问，必须使用类名（而不是实例名）和点运算符。继续上面的代码：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>D dealer = <span class="keyword">new</span> D(); <span class="comment">//创建一个D类的实例dealer</span>
-
-<span class="comment">//如果要访问实例类成员Val1，那么</span>
-dealer.Val1 = <span class="number">10</span>;
-
-<span class="comment">//如果要访问静态字段Val2，那么</span>
-D.Val2 = <span class="number">15</span>;
-</pre></td></tr></table></figure>
-
-<h3 id="-">静态成员的生存期</h3>
-<p>实例类成员一但实例销毁也就不存在了，而静态成员则会一直存在。</p>
-<h2 id="-">静态函数成员</h2>
-<p>静态函数主要是指静态方法，是执行代码。与静态字段一样，不需要实例化就可以调用。需要注意的是</p>
-<p><strong><em>静态方法不能访问实例成员，只能访问其他静态成员</em></strong></p>
-<h2 id="-">其它静态成员</h2>
-<p>数据成员中的<strong>常量</strong>不能声明为static。</p>
-<p>函数类成员中<strong>索引器</strong>不能声明为static。</p>
-<h1 id="-">&lt;未完待续&gt;</h1>
 
     
   </div>
   <footer class="end-sep">
     
+      
+        <div class="alignleft">
+          <a href="/2014/03/04/类/#more" class="more-link">Read More</a>
+        </div>
       
       
     
@@ -286,218 +216,15 @@ D.Val2 = <span class="number">15</span>;
 <li><strong>类</strong>是引用类型，<strong>结构</strong>是值类型；</li>
 <li>结构是隐式的、密封的，因此不能像类那样被派生。</li>
 </ul>
-<p>声明结构的语法与声明类相似：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="keyword">struct</span> StructName
-{
-MemberDeclarations
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">值类型的结构</h2>
-<p>既然是值类型，那么结构变量就含有自己的数据，因此：</p>
-<ul>
-<li>结构类型的变量不能为null；</li>
-<li>两个结构变量不能引用同一对象。</li>
-</ul>
-<p>对比结构和类的代码：
-类的声明：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>class DemoClass
-{
-<span class="keyword">public</span> <span class="keyword">int</span> x;
-<span class="keyword">public</span> <span class="keyword">int</span> y;
- }
-</pre></td></tr></table></figure>
-
-<p>结构的声明：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="keyword">struct</span> DemoStruct
-{
-<span class="keyword">public</span> x;
-<span class="keyword">public</span> y;
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">给结构赋值</h2>
-<pre><code>class2 = class1；
-</code></pre><p>上面这个给类赋值的语句，只是复制了数值的引用，即这样赋值以后，class1和class2这两个引用，都是指向堆中的相同对象。而像下面这样给结构赋值的话：</p>
-<pre><code>struct2 = struct1;
-</code></pre><p>struct1的数值会直接复制到struct2中，此时在栈中存在struct1和struct2两个内容相同但各自完全独立的对象。</p>
-<h2 id="-">结构类型的构造函数</h2>
-<p>结构，可以有实例构造函数，也可以有静态构造函数，但是不允许有析构函数。</p>
-<h3 id="-">实例构造函数</h3>
-<p>编译器会隐式的提供一个默认构造函数，将结构中的每个成员设为该类型的默认值。
-与类不同，如果手动为类创建构造函数，那么隐式的无参数构造函数就无效了。但是结构的默认构造函数不能删除或重定义，即使手动编写结构的构造函数，默认的无参数构造函数仍然有效。
-实例化结构与类一样，要用new语法，例如：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre><span class="keyword">struct</span> DemoStruct
-{
-    whatever inside;
-}
-<span class="class"><span class="keyword">class</span> <span class="title">Program</span>
-{</span>
-    <span class="keyword">static</span> <span class="keyword">void</span> Main()
-    {
-        DemoStruct s1 = <span class="keyword">new</span> DemoStruct(); <span class="comment">//隐式构造函数</span>
-        DemoStruct s2 = <span class="keyword">new</span> DemoStruct( <span class="number">5</span>, <span class="number">10</span> ); <span class="comment">//自定义构造函数</span>
-    }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-">静态构造函数</h3>
-<p>结构类型的静态构造函数与类是相同的，静态构造函数创建并初始化静态数据成员，不能引用实例成员。</p>
-<h2 id="-">在结构中不允许使用字段初始化语句</h2>
-<p>例如，下面的语句不能编译通过：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="keyword">struct</span> Simple
-{
-    <span class="keyword">public</span> <span class="keyword">int</span> = <span class="number">10</span>;  <span class="comment">//这是不可以的！</span>
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">密封</h2>
-<p>结构是密封的，不允许派生，不支持继承，不能使用以下修饰符：</p>
-<pre><code>protected
-internal
-abstract
-virtual
-</code></pre><p>结构是派生自System.ValueType，而System.ValueType派生自Object。
-可以用于结构成员并与继承相关的关键字是new和override，当创建于结构的基类System.ValueType的成员相同名称的成员时可以使用这两个修饰符。</p>
-<h2 id="-">装箱和拆箱</h2>
-<p>与其它值类型一样，如果要将结构实例作为引用类型的对象，就必须进行装箱。</p>
-<h2 id="-">结构作为返回值和参数</h2>
-<ul>
-<li>当结构作为返回值时，将创建一个副本，从函数成员返回。</li>
-<li>当结构作为值参数时，也是创建一个副本，用于方法执行中。</li>
-<li>把结构作为ref或out参数的话，传入方法的是结构的一个引用，方法可以修改原结构数据成员。</li>
-</ul>
-<h2 id="-">关于结构的其它注意事项</h2>
-<p>如果不打算包含方法，那么可以用结构代替类，因为结构的实例开销比较小。但是要注意装箱和拆箱的代价更大，所以如果需要引用类型，也许还是应该考虑使用类。</p>
-<p>预定义的简单类型，如<code>int</code>、<code>short</code>、<code>long</code>等等，尽管在.Net和C#中被视为原始类型，但其实他们在.Net中都实现为结构。
-可以声明分部结构（使用partial关键字），这与类是相同的。
-与类一样，可以实现<strong>接口</strong>。</p>
 
     
   </div>
   <footer class="end-sep">
     
       
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-
-  <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <time datetime="2014-03-03T16:01:40.000Z"><a href="/2014/03/04/非常不舒服！/">3月 4 2014</a></time>
-    
-    
-  
-    <h1 class="title"><a href="/2014/03/04/非常不舒服！/">非常不舒服！</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>每次deploy都要输入帐号密码，烦死了，找了半天也不知道怎么弄这东西。
-这种谢耳朵专用产品果然是不适合我这种麻瓜。</p>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-
-  <article class="mypost">
-  <header>
-    
-      <div class="icon"></div>
-      <time datetime="2014-03-03T15:50:18.000Z"><a href="/2014/03/03/test-article/">3月 3 2014</a></time>
-    
-    
-  
-    <h1 class="title"><a href="/2014/03/03/test-article/">test article</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <h2 id="-">试试好用不</h2>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-
-  <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <time datetime="2014-03-03T15:36:02.000Z"><a href="/2014/03/03/hello-world/">3月 3 2014</a></time>
-    
-    
-  
-    <h1 class="title"><a href="/2014/03/03/hello-world/">Hello World</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>Welcome to <a href="http://zespia.tw/hexo" target="_blank">Hexo</a>! This is your very first post. Check <a href="http://zespia.tw/hexo/docs" target="_blank">documentation</a> to learn how to use.</p>
-
-    
-  </div>
-  <footer class="end-sep">
-    
+        <div class="alignleft">
+          <a href="/2014/03/04/C#中的结构/#more" class="more-link">Read More</a>
+        </div>
       
       
     
