@@ -46,6 +46,176 @@
   <header>
     
       <div class="icon"></div>
+      <time datetime="2014-03-04T18:50:10.000Z"><a href="/2014/03/05/类-第二部分/">3月 5 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/05/类-第二部分/">类-第二部分：常量和属性</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h1 id="-">&lt;接上&gt;</h1>
+<h2 id="-">常量</h2>
+<p>常量与静态字段（静态量）很像。常量对类的每个实例都是可见的，没有实例，常量也可以使用。</p>
+<p>但是，<strong>常量没有自己的存储位置</strong>，而是在编译时被编译器替换。静态量可以被改变，但常量一但声明就不可再改变。</p>
+<p>静态常量分为<strong>成员常量</strong>和<strong>本地常量</strong>。它们的区别是：成员常量是在方法中声明的，本地常量是在类中声明的。</p>
+<p>常量在声明的时候必须赋值，并且除声明时以外不能在其它地方赋值。</p>
+<p>与常量相似的还有<strong>readonly</strong>（只读属性），声明为readonly的对象像常量一样不能改变值，但它是在运行时被指派，而不是在编译时被指派。</p>
+<p>有时也将const称为静态常量，将readonly称为动态常量。总结这几种常量的主要区别如下：</p>
+<blockquote>
+<p>本地常量：在方法中声明，方法执行时创建，方法执行完毕即被销毁；</p>
+<p>成员常量：在类中声明，在编译时被替换，始终存在，但不消耗内存；</p>
+</blockquote>
+<pre><code>以上两种常量称为静态常量，不能new，只能用部分类型；
+</code></pre><blockquote>
+<p>只读常量：相当于类中的数据成员，可以是任意类型，可以在构造函数中赋值。</p>
+</blockquote>
+<p><strong>常量与静态量是两码事，不能同时声明const和static。</strong></p>
+<hr>
+<h2 id="-">属性</h2>
+<p>属性是<strong>代表</strong>类中的或类的实例中的一个数据项的成员。使用属性的语法看起来与使用字段是相同的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>MyClass mc = <span class="keyword">new</span> MyClass();
+
+mc.myField = <span class="number">5</span>;        <span class="comment">//这是字段</span>
+mc.MyProperty = <span class="number">10</span>;    <span class="comment">//这是属性</span>
+</pre></td></tr></table></figure>
+
+<p>如上，完全看不出来。但一般为了区分，属性的名字是首字母大写的，而字段是首字母小写。</p>
+<p>属性与字段的共同点包括：</p>
+<ul>
+<li>它们都是命名的类成员；</li>
+<li>它们都有明确的类型；</li>
+<li>都可以被读取或赋值。</li>
+</ul>
+<p>属性与字段的区别在于：</p>
+<ul>
+<li>属性是一个函数成员，字段是数据成员；</li>
+<li>由上可知，属性不为数据存储分配内存，它只是字段的“代理”；</li>
+<li>最主要的区别：属性可以执行代码。</li>
+</ul>
+<p>属性的函数体中，包含<strong>set</strong>和<strong>get</strong>两个方法。除此以外不能有其它方法，这两种方法有预定义的语法和语义，不能改变。但是，可以只使用其中之一，或者干脆都不用（那么就是一个没有意义的属性）。</p>
+<p>声明属性的代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">private</span> <span class="keyword">int</span> i; <span class="comment">//字段用来存储数据，但外部不可直接访问</span>
+
+<span class="keyword">int</span> MyValue    <span class="comment">//属性可以访问函数中的私有字段</span>
+{
+    <span class="keyword">set</span>{ i = <span class="keyword">value</span>; }
+    <span class="keyword">get</span>{ <span class="keyword">return</span> i; }   
+}
+</pre></td></tr></table></figure>
+
+<p>set和get，称为<strong>访问器</strong>。其中：</p>
+<blockquote>
+<p>set访问器<strong>拥有一个单独的、隐形的值参value</strong>，是指调用该属性的set方法时传入的值，因此它也必然与属性的类型相同。</p>
+<p>set访问器的返回类型是void。</p>
+<p>get访问器没有参数。</p>
+<p>get拥有与属性类型相同的返回类型，即调用属性的get方法时，得到与属性类型相同的返回值。</p>
+</blockquote>
+<p>使用属性时，使用跟使用字段相同的语法，编译器会隐式调用访问器，不能显式的调用set或get访问器。</p>
+<p>属性不分配内存，因此一般都要与字段配合使用。属性内可以做各种函数计算，只要在get中返回匹配类型即可。</p>
+<p>一般来说，属性要声明为public，以供外部调用，而对应的实际字段声明为private，禁止外部直接访问。</p>
+<h2 id="-">只读或只写的属性</h2>
+<p>如果属性中只包含set访问器，那么该属性就是只写的，反之如果只包含get访问器，则属性是只读的。</p>
+<p>通常来说，使用属性比直接使用公共字段要好得多，这是因为：</p>
+<ul>
+<li>属性是函数成员而不是数据成员，因此允许处理如何输入或输出；</li>
+<li>属性可以方便的设置为只读或只写；</li>
+<li>字段与属性在编译后语义不同；</li>
+</ul>
+<h2 id="-">自动属性</h2>
+<p>只需简单声明set和get即可自动声明属性。如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">C1</span>
+{</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> MyProperty
+    {
+        <span class="keyword">set</span>; <span class="keyword">get</span>;
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>VS中也提供了直接将字段封装为属性的快捷方式。</p>
+<h2 id="-">静态属性</h2>
+<p>属性可以声明为static，访问静态属性与其它静态对象是一样的，即：</p>
+<ul>
+<li>静态属性不能访问类的实例成员，只能访问静态成员，但可以被实例成员访问；</li>
+<li>不管是否创建类的实例，静态属性都存在；</li>
+<li>丛类的外部访问时，必须用类名，而不能用实例名。</li>
+</ul>
+<h1 id="-">&lt;未完待续&gt;接下来是构造函数</h1>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+
+  <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-04T12:28:48.000Z"><a href="/2014/03/04/on-the-screen/">3月 4 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/04/on-the-screen/">on the screen</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://frontrowfeatures.com/wp-content/uploads/2013/06/jun24wilson02_hitn.jpg" alt="Ruth Wilson"></p>
+<p>英国女演员 Ruth Wilson，嘴长得太有个性了，不错。</p>
+<p><img src="http://img.poptower.com/pic-106088/clara-paget.jpg?d=1024" alt="Clara Paget"></p>
+<p>Clara paget,异曲同工的嘴，但没有Ruth秀气。</p>
+<p><img src="http://www.jondi.fr/wp-content/uploads/2013/07/le_roi_et_l_oiseau_version_restauree.jpg" alt="Le Roi et l&#39;oiseau"></p>
+<p>小鸟！小鸟！注意！注意！有一个扫烟囱的小伙子和一个牧羊女……</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+
+  <article class="post">
+  <header>
+    
+      <div class="icon"></div>
       <time datetime="2014-03-04T09:32:41.000Z"><a href="/2014/03/04/随想/">3月 4 2014</a></time>
     
     
@@ -59,18 +229,15 @@
     
       <p><img src="http://ww3.sinaimg.cn/mw600/60f11f77gw1eamraunavzj21hc0u0gr4.jpg" alt="beau"></p>
 <p>一个家庭，如果有病人或者罪人，这个家庭的正常人也会很难受，但又应该照顾这些“家人”，尤其是直系亲属，甚至有法律上的义务，这时抱怨受到拖累也是徒劳了。</p>
-<p>国家也有类似的现象。</p>
-<p>东突厥斯坦问题，到底是怎样的，如同六四一样扑朔迷离。在集权国家，政治尤其关注“你怎么想”。政府为何要控制你怎么想？你肯定不希望任何人干涉你，别说怎么想，言论自由都是基本人权，对吧？不过什么叫集权？集权就是你没有人权了，你的人权给集中到某些人那去了。</p>
-<p>但是，掌权者未必是为了压迫人民而集权（虽然这是最常见的情况），集权本身也并非一无是处。对中国来说，政府一直要集权统治，很大原因是基本没有哪个人有能力改变这一状况。还有一重考虑，如果你家里有个精神病，你会在重大事务中让他投一票吗？也许你是个理想主义者，会说不管他是什么样，哪怕是神经病，也有投票的权力。好的，这是一种价值观，但你也应该想得到，很多人不会认同这一点。这个时候，很多人可能会倾向于剥夺这个神经病的投票权。这就是所谓的“人民民主专制”，给“正常人”民主，但是对“神经病”专制。看待问题的不同方式，形成了意识形态的根本差别。</p>
-<p>可是这种“可以专制”的思维一但成立，就很危险，因为“精神病”这个范畴难以界定。一但某人被认定为精神病，就可以合情合理的剥夺他的权力，那么这个精神病的界定就成了玄妙的问题。如果允许任何理由的专制，那么被专制对象的确定就成了悲剧的温床。</p>
-<p>其实精神病如果可以行使他的权力，精神病的症状就有机会减轻，也会成为正常人。但在这之前，会造成多大的破坏就很难衡量。但不给他权力，他就一直是精神病，而且可能会病的更厉害。</p>
-<p>中国就是在这样矛盾的思维下摸索平衡。而民主国家已经过了这个阶段，成功的建立了减少精神病的机制，即三权分立。其实近代中国有很多次机会建立起现代国家制度，却总是被大量精神病和阴差阳错给耽误。</p>
-<p>但是，急什么呢？急是没用的，其实每一届政府都有人在为推进政治改革而努力，这是他们的工作，如果你不想去淌那浑水，就不要抱怨人家干的好不好了。</p>
 
     
   </div>
   <footer class="end-sep">
     
+      
+        <div class="alignleft">
+          <a href="/2014/03/04/随想/#more" class="more-link">Read More</a>
+        </div>
       
       
     
@@ -362,9 +529,9 @@
   <h3 class="title">分类</h3>
   <ul class="entry">
   
-    <li><a href="/categories/编程学习/">编程学习</a><small>2</small></li>
+    <li><a href="/categories/编程学习/">编程学习</a><small>3</small></li>
   
-    <li><a href="/categories/随笔/">随笔</a><small>5</small></li>
+    <li><a href="/categories/随笔/">随笔</a><small>6</small></li>
   
   </ul>
 </div>
@@ -384,6 +551,14 @@
   <ul class="entry">
     
       <li>
+        <a href="/2014/03/05/类-第二部分/">类-第二部分：常量和属性</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/04/on-the-screen/">on the screen</a>
+      </li>
+    
+      <li>
         <a href="/2014/03/04/随想/">随想</a>
       </li>
     
@@ -393,14 +568,6 @@
     
       <li>
         <a href="/2014/03/04/新键盘到手/">night</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/04/night/">night</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/04/类/">类</a>
       </li>
     
   </ul>
