@@ -62,112 +62,15 @@
 <p>常量与静态字段（静态量）很像。常量对类的每个实例都是可见的，没有实例，常量也可以使用。</p>
 <p>但是，<strong>常量没有自己的存储位置</strong>，而是在编译时被编译器替换。静态量可以被改变，但常量一但声明就不可再改变。</p>
 <p>静态常量分为<strong>成员常量</strong>和<strong>本地常量</strong>。它们的区别是：成员常量是在方法中声明的，本地常量是在类中声明的。</p>
-<p>常量在声明的时候必须赋值，并且除声明时以外不能在其它地方赋值。</p>
-<p>与常量相似的还有<strong>readonly</strong>（只读属性），声明为readonly的对象像常量一样不能改变值，但它是在运行时被指派，而不是在编译时被指派。</p>
-<p>有时也将const称为静态常量，将readonly称为动态常量。总结这几种常量的主要区别如下：</p>
-<blockquote>
-<p>本地常量：在方法中声明，方法执行时创建，方法执行完毕即被销毁；</p>
-<p>成员常量：在类中声明，在编译时被替换，始终存在，但不消耗内存；</p>
-</blockquote>
-<pre><code>以上两种常量称为静态常量，不能new，只能用部分类型；
-</code></pre><blockquote>
-<p>只读常量：相当于类中的数据成员，可以是任意类型，可以在构造函数中赋值。</p>
-</blockquote>
-<p><strong>常量与静态量是两码事，不能同时声明const和static。</strong></p>
-<hr>
-<h2 id="-">属性</h2>
-<p>属性是<strong>代表</strong>类中的或类的实例中的一个数据项的成员。使用属性的语法看起来与使用字段是相同的。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>MyClass mc = <span class="keyword">new</span> MyClass();
-
-mc.myField = <span class="number">5</span>;        <span class="comment">//这是字段</span>
-mc.MyProperty = <span class="number">10</span>;    <span class="comment">//这是属性</span>
-</pre></td></tr></table></figure>
-
-<p>如上，完全看不出来。但一般为了区分，属性的名字是首字母大写的，而字段是首字母小写。</p>
-<p>属性与字段的共同点包括：</p>
-<ul>
-<li>它们都是命名的类成员；</li>
-<li>它们都有明确的类型；</li>
-<li>都可以被读取或赋值。</li>
-</ul>
-<p>属性与字段的区别在于：</p>
-<ul>
-<li>属性是一个函数成员，字段是数据成员；</li>
-<li>由上可知，属性不为数据存储分配内存，它只是字段的“代理”；</li>
-<li>最主要的区别：属性可以执行代码。</li>
-</ul>
-<p>属性的函数体中，包含<strong>set</strong>和<strong>get</strong>两个方法。除此以外不能有其它方法，这两种方法有预定义的语法和语义，不能改变。但是，可以只使用其中之一，或者干脆都不用（那么就是一个没有意义的属性）。</p>
-<p>声明属性的代码如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="keyword">private</span> <span class="keyword">int</span> i; <span class="comment">//字段用来存储数据，但外部不可直接访问</span>
-
-<span class="keyword">int</span> MyValue    <span class="comment">//属性可以访问函数中的私有字段</span>
-{
-    <span class="keyword">set</span>{ i = <span class="keyword">value</span>; }
-    <span class="keyword">get</span>{ <span class="keyword">return</span> i; }   
-}
-</pre></td></tr></table></figure>
-
-<p>set和get，称为<strong>访问器</strong>。其中：</p>
-<blockquote>
-<p>set访问器<strong>拥有一个单独的、隐形的值参value</strong>，是指调用该属性的set方法时传入的值，因此它也必然与属性的类型相同。</p>
-<p>set访问器的返回类型是void。</p>
-<p>get访问器没有参数。</p>
-<p>get拥有与属性类型相同的返回类型，即调用属性的get方法时，得到与属性类型相同的返回值。</p>
-</blockquote>
-<p>使用属性时，使用跟使用字段相同的语法，编译器会隐式调用访问器，不能显式的调用set或get访问器。</p>
-<p>属性不分配内存，因此一般都要与字段配合使用。属性内可以做各种函数计算，只要在get中返回匹配类型即可。</p>
-<p>一般来说，属性要声明为public，以供外部调用，而对应的实际字段声明为private，禁止外部直接访问。</p>
-<h2 id="-">只读或只写的属性</h2>
-<p>如果属性中只包含set访问器，那么该属性就是只写的，反之如果只包含get访问器，则属性是只读的。</p>
-<p>通常来说，使用属性比直接使用公共字段要好得多，这是因为：</p>
-<ul>
-<li>属性是函数成员而不是数据成员，因此允许处理如何输入或输出；</li>
-<li>属性可以方便的设置为只读或只写；</li>
-<li>字段与属性在编译后语义不同；</li>
-</ul>
-<h2 id="-">自动属性</h2>
-<p>只需简单声明set和get即可自动声明属性。如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">C1</span>
-{</span>
-    <span class="keyword">public</span> <span class="keyword">int</span> MyProperty
-    {
-        <span class="keyword">set</span>; <span class="keyword">get</span>;
-    }
-}
-</pre></td></tr></table></figure>
-
-<p>VS中也提供了直接将字段封装为属性的快捷方式。</p>
-<h2 id="-">静态属性</h2>
-<p>属性可以声明为static，访问静态属性与其它静态对象是一样的，即：</p>
-<ul>
-<li>静态属性不能访问类的实例成员，只能访问静态成员，但可以被实例成员访问；</li>
-<li>不管是否创建类的实例，静态属性都存在；</li>
-<li>丛类的外部访问时，必须用类名，而不能用实例名。</li>
-</ul>
-<h1 id="-">&lt;未完待续&gt;接下来是构造函数</h1>
 
     
   </div>
   <footer class="end-sep">
     
+      
+        <div class="alignleft">
+          <a href="/2014/03/05/类-第二部分/#more" class="more-link">Read More</a>
+        </div>
       
       
     
@@ -195,7 +98,7 @@ mc.MyProperty = <span class="number">10</span>;    <span class="comment">//这�
       <p><img src="http://frontrowfeatures.com/wp-content/uploads/2013/06/jun24wilson02_hitn.jpg" alt="Ruth Wilson"></p>
 <p>英国女演员 Ruth Wilson，嘴长得太有个性了，不错。</p>
 <p><img src="http://img.poptower.com/pic-106088/clara-paget.jpg?d=1024" alt="Clara Paget"></p>
-<p>Clara paget,异曲同工的嘴，但没有Ruth秀气。</p>
+<p>Clara Paget,异曲同工的嘴，但没有Ruth秀气。</p>
 <p><img src="http://www.jondi.fr/wp-content/uploads/2013/07/le_roi_et_l_oiseau_version_restauree.jpg" alt="Le Roi et l&#39;oiseau"></p>
 <p>小鸟！小鸟！注意！注意！有一个扫烟囱的小伙子和一个牧羊女……</p>
 
