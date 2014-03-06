@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>第一个软件和第一个游戏 | Always lost</title>
+  <meta name="author" content="lvcloud">
+  
+  <meta name="description" content="wasting life">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <meta property="og:title" content="第一个软件和第一个游戏"/>
+  <meta property="og:site_name" content="Always lost"/>
+
+  <link rel="alternate" href="/atom.xml" title="Always lost" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+
+<body>
+  <div class="wrapper">
+    <header id="header"><div class="title">
+  <h1><a href="/">Always lost</a></h1>
+  <p><a href="/">Never forget</a></p>
+</div>
+<nav class="nav">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-06T20:03:00.000Z"><a href="/2014/03/07/第一个软件和第一个游戏/">3月 7 2014</a></time>
+    
+    
+  
+    <h1 class="title">第一个软件和第一个游戏</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>今天做完了第一个软件和第一个游戏，相当有效率……虽然没怎么睡觉，也没怎么务正业……</p>
+<p><img src="https://lh4.googleusercontent.com/-UeXEdNDq90A/UxjW6eizs7I/AAAAAAAAP_U/bJbIKKKE0MY/w297-h264-no/QQ%25E6%2588%25AA%25E5%259B%25BE20140307041036.jpg" alt="Login Pannel"></p>
+<a id="more"></a>
+
+<p>第一个软件是用C#做的一个加密记事本。没有做计划，完全是想到哪做到哪，所以到最后结构稍微有点乱了，不过本来就没打算做好，没想到最后做的还比较完美。</p>
+<p><img src="https://lh5.googleusercontent.com/-eNSCT_6v9Lk/UxjW6c6G7kI/AAAAAAAAP_Q/9x5a7NCKfe8/w593-h588-no/QQ%25E6%2588%25AA%25E5%259B%25BE20140307041057.jpg" alt="Write Board"></p>
+<p>这个软件实现的几个主要功能是：</p>
+<ul>
+<li>账号密码登陆；</li>
+<li>自动获取当前日期和今日天气；</li>
+<li>每天一份文档，按日期自动保存在软件目录下；</li>
+<li>文件内容加密了，只能用这个软件登陆进去看；</li>
+<li>只是给自己用的，所以没做设置帐号密码的功能，直接写死在程序里了。</li>
+</ul>
+<p><img src="https://lh6.googleusercontent.com/-pWXLP0VxhQ0/UxjW6f0rXBI/AAAAAAAAP_M/i-wClkw8KQU/w593-h588-no/QQ%25E6%2588%25AA%25E5%259B%25BE20140307041109.jpg" alt="File list"></p>
+<p>以上，下面说游戏。</p>
+<hr>
+<p>说是自己做的第一个游戏，其实是照着教程来的。在这里把一些重要的技术点记录一下：</p>
+<p>游戏类型是打飞机。</p>
+<ul>
+<li>调用transform比较消耗资源，因此不应在脚本中重复调用，而要声明一个transform类型的引用，然后在void start()里将this.transform赋给它，这样以后直接调用这个transform实例；</li>
+<li>控制频率的简单做法是，声明一个float变量用来倒计时，为0时再出发。代码大概是这样：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="keyword">void</span> Update()
+{
+
+    <span class="keyword">float</span> actionRate = <span class="number">0.1</span>;
+
+    actionRate -= Time.deltaTime;
+
+    <span class="keyword">if</span> (actionRate &lt;= <span class="number">0</span>)
+    {
+        actionRate = <span class="number">0.1</span>;
+    
+        <span class="comment">//DoSomething();</span>
+    }
+}
+</pre></td></tr></table></figure>
+
+<ul>
+<li>继承类的时候，void Start()和void Update()不能继承，因此如果要继承这里的行为，就在外面写方法，在里面调用。子类需要在这两个代码块里重复调用。</li>
+<li>OnTriggerEnter()是专用函数，检验碰撞事件，例如：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="literal">void</span> OnTriggerEnter (Collider other)
+{
+    <span class="keyword">if</span>(other<span class="built_in">.</span><span class="built_in">tag</span><span class="built_in">.</span>CompareTo(<span class="string">"whatEverYouLike"</span>) <span class="subst">==</span> <span class="number">0</span>) <span class="comment">//这句表示匹配</span>
+    {
+        <span class="comment">//Do something();</span>
+    }
+}
+</pre></td></tr></table></figure>
+
+<ul>
+<li>添加声音的时候，如果声音播放到一半，带声音的物体被销毁了，声音就立刻停止。因此如果将声音直接加在粒子物体上，那么粒子物体可能会self deconstruct，如果声音比粒子时间长，声音会中断。</li>
+<li>播放声音需要有Audio Source，然后才能播放Audio Clip。</li>
+<li>Instantiate就是Spwan物体。</li>
+<li>加载另一个关卡的时候，除了静态数据以外其它物体都会被销毁。另外，可以在Awake中用DontDestroyOnLoad()声明某个不会被删除，然后在这个物体身上放跨越关卡的东西，比如连续播放的音乐。</li>
+<li>Application.Quit()只有在最终Build版本中才有效，在引擎中测试是无效的。</li>
+<li>Screen.SetResolution(<int width>, <int height>, <bool fullScreen>)可以设置启动分辨率。在PC版的project setting中设置分辨率完全没用。</li>
+</ul>
+<p><img src="https://lh3.googleusercontent.com/-3bfPMHMMn7I/UxjeGp_hsBI/AAAAAAAAP_s/W-bnCdSMli0/w592-h905-no/QQ%25E6%2588%25AA%25E5%259B%25BE20140307044341.jpg" alt="Space War"></p>
+<h1 id="-c-">哦也，碎叫。接下来挑战更复杂一点的项目，一个塔防游戏。不过C#该做个什么东西练练手呢？</h1>
+
+    
+  </div>
+  <footer>
+    
+      
+  
+  <div class="categories">
+    <a href="/categories/编程学习/">编程学习</a>
+  </div>
+
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div>
+  </div>
+  <div class="widget-wrapper">
+    <aside id="sidebar">
+  
+  
+    
+      
+      
+
+<div class="widget tag first">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/编程学习/">编程学习</a><small>5</small></li>
+  
+    <li><a href="/categories/随笔/">随笔</a><small>8</small></li>
+  
+  </ul>
+</div>
+
+    
+      
+      
+    
+      
+      
+    
+      
+      
+
+<div class="widget recent-posts">
+  <h3 class="title">最近的文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/03/07/第一个软件和第一个游戏/">第一个软件和第一个游戏</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/06/最简单的窗体传值/">最简单的窗体传值</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/05/高原/">高原</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/05/summer/">夏天</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/05/类-第二部分/">类-第二部分：常量和属性</a>
+      </li>
+    
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget blogroll">
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+  
+    
+    <li><a href="http://heroicyang.com/" target="_blank">Heroic Yang&#39;s Blog</a></li>
+  
+  </ul>
+</div>
+
+    
+  
+</aside>
+<div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">lvcloud</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var disqus_shortname = 'lvcloudgit';
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
