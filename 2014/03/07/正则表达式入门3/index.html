@@ -1,0 +1,292 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>正则表达式入门（3）——重复匹配 | Always lost</title>
+  <meta name="author" content="lvcloud">
+  
+  <meta name="description" content="wasting life">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <meta property="og:title" content="正则表达式入门（3）——重复匹配"/>
+  <meta property="og:site_name" content="Always lost"/>
+
+  <link rel="alternate" href="/atom.xml" title="Always lost" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+
+<body>
+  <div class="wrapper">
+    <header id="header"><div class="title">
+  <h1><a href="/">Always lost</a></h1>
+  <p><a href="/">Never forget</a></p>
+</div>
+<nav class="nav">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-07T14:17:16.000Z"><a href="/2014/03/07/正则表达式入门3/">3月 7 2014</a></time>
+    
+    
+  
+    <h1 class="title">正则表达式入门（3）——重复匹配</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>这个问题是：如何匹配连续多个重复出现的字符或字符集合？例如，如何匹配一个电子邮件的格式？</p>
+<pre><code>text@text.text
+</code></pre><p>电子邮件的格式包含了三段，但我们不知道每一段的长度。</p>
+<a id="more"></a>
+
+<h1 id="1-">1.匹配一个或多个字符</h1>
+<p>在字符或字符集合后面跟一个“+”（加号），表示匹配1个或多个该字符或字符集合。例如，<strong>[0-9]+</strong>就表示一串任意长度的数字。</p>
+<p>回到电子邮件的例子。电子邮件中的三个字段，其组成字符应该是<strong>\w</strong>类的，所以可以表示为：</p>
+<pre><code>\w+@\w+\.\w+
+</code></pre><p>注意w是小写的，大写W表示“非”。</p>
+<p>但是这还是有问题，因为有些电子邮件的地址中包含了“.”点字符（起这种邮件名真是蛋疼），那么\w是不包含点字符的。比如：</p>
+<pre><code>michael.jackson@moon.com
+</code></pre><p>这样的地址，上面的正则只能匹配成<strong>jackson@moon.com</strong>了。</p>
+<p>但是，还有些电子邮件地址有多级域名，例如：</p>
+<pre><code>tom.jerry@sina.com.cn
+</code></pre><p>所以，要用<strong>[\w.]</strong>才能描述这种情况了。重新修改一下电子邮件的正则，应该是：</p>
+<pre><code>[\w.]+@[\w.]+\.\w+
+</code></pre><p>已经开始有点看不懂了……这里要特别注意的是，字符集合中的“.”或者“+”等元字符，与字符集合外的规则不同，他们只表示自己，不需要转义。也可以说：</p>
+<pre><code>字符集合内（即方括号[]内）的语法与字符集合外是不同的，务必注意。
+</code></pre><p>还有一点，+加号表示1个或以上，而不包括0个。如果要包括可有可无的情况，那么就用<strong>*</strong>（星号）替换<strong>+</strong>（加号）。 </p>
+<h1 id="2-">2.匹配零个或多个字符</h1>
+<p>考虑有这么一句话：</p>
+<blockquote>
+<p>Hello, my email address is .ben@red.net.</p>
+</blockquote>
+<p>如果用前面的正则，会匹配出这个结果：</p>
+<pre><code>.ben@red.net
+</code></pre><p>显然前面多打了个“.”，而点字符在邮件地址中可以出现，却不能出现在开头，那就是不合法的。这个时候，我们要确保第一个字符是<strong>\w</strong>类才行。</p>
+<p>再次修改邮件的正则格式：</p>
+<pre><code>\w+[\w.]*@[\w.]+\.\w
+</code></pre><p>现在ok了，会自动把前面那个“.”给去掉了。注意<strong>[\w.]*</strong>表示可有可无。如果仍然用<strong>[\w.]+</strong>的话，则邮件名的@前面至少要有两个字符才能匹配了。</p>
+<h1 id="3-">3.匹配零个或一个字符</h1>
+<p>问号（？）与点符号（.）的区别是：问号也是匹配任意单个字符，但可以有，也可以没有，而点符号隐含的意思是“必须有”。</p>
+<p>例如，要匹配http和https，应该写：</p>
+<pre><code>https?
+</code></pre><p>它表示http后面的s可有可无，都能匹配。</p>
+<h3 id="-r-r-">[\r]?与\r?的区别是什么？</h3>
+<p>这两种写法的匹配结果是一样的，当然带[]会更容易读一些。但实际的语义一样吗？这个问题留待以后研究吧。</p>
+<h1 id="4-">4.匹配精确重复数</h1>
+<p>+和*匹配的字符数是任意长度，但如果要精确限定重复字符的个数，需要用{}元字符。再例如颜色值的表达式，是一个#后面跟6个十六进制字符。重复写6遍[A-Fa-f0-9]或者[[:xdigit:]]都可以，但还有简单的写法：</p>
+<pre><code>#[[:xdigit:]]{6}
+</code></pre><p>就可以了。</p>
+<h1 id="5-">5.重复匹配数量的区间</h1>
+<p>如果要匹配一堆长度在3位到8位之间的数字，该怎么写呢？</p>
+<pre><code>[0-9]{3,8}
+</code></pre><p>就这么写，很简单，只包含长度在<strong>3位到8位之间</strong>的数字串，会把22或者987654321等长度不符合要求的字符串给过滤掉。</p>
+<p>由此还可以推测出，如果要限制最小重复次数，或者最大重复次数，只要去掉逗号左右其中一个数字就行了。例如：</p>
+<pre><code>[a-z]{5,}    //5位以上长度的连续小写字母串
+[A-Za-z]{,30}    //30位以下长度的连续字母串
+</code></pre><h1 id="6-">6.“贪婪型”元字符和“懒惰型”元字符</h1>
+<p>比如有这么一句话：</p>
+<pre><code>living in &lt;B&gt;AK&lt;/B&gt; and &lt;B&gt;HI&lt;/B&gt;.
+</code></pre><p>这是常见的html标记。如果要提取AK和HI，也许你会写成：</p>
+<pre><code>&lt;B&gt;.*&lt;/B&gt;
+</code></pre><p>但是这会悲剧的提取出下面这句结果：</p>
+<pre><code>&lt;B&gt;AH&lt;/B&gt; and &lt;B&gt;HI&lt;/B&gt;
+</code></pre><p>中间的\</B>和\</B>都被（.*）给包括进去了。这是因为星号（*）和加号（+）都属于<strong>贪婪型</strong>元字符。所谓贪婪型元字符，就是从头到尾的去整体匹配，而不是从头开始顺序匹配，遇到第一个能结束匹配的位置就停止。如果要正确截取上面的例子，就需要使用懒惰型元字符，或者说是*或+的<strong>懒惰型版本</strong>。方法是在贪婪型元字符后面加个问号（?）。</p>
+<pre><code>*的懒惰型是*?
++的懒惰型是+?
+{n,n}的懒惰型是{n,n}?
+</code></pre><p>以此类推。注意，指定重复字符范围的语法<strong>{,}</strong>也属于贪婪型，它的懒惰型版本是<strong>{,}?</strong>。</p>
+<p>将前面的正则改为：</p>
+<pre><code>&lt;B&gt;.*?&lt;/B&gt;
+</code></pre><p>就可以完美匹配了。当然作为html标记本身来说，还包括\<b>和\</b>这样的小写方式，如果需要匹配的话，应该是：</p>
+<pre><code>&lt;[Bb]&gt;.*?&lt;/[Bb]&gt;
+</code></pre><p>问题解决了。</p>
+<h1 id="btw-">BTW：我的小软件《每日笔记》获取天气的问题终于解决了，虽然可能不是最好的方法，但毕竟结果是正确了。</h1>
+<p><img src="https://lh4.googleusercontent.com/-v5q6gKy24Sc/UxntgV9AypI/AAAAAAAAQAY/eZXllxeegqU/w593-h588-no/QQ%25E6%2588%25AA%25E5%259B%25BE20140308000005.jpg" alt="天气显示正常！"></p>
+
+    
+  </div>
+  <footer>
+    
+      
+  
+  <div class="categories">
+    <a href="/categories/正则表达式/">正则表达式</a>
+  </div>
+
+      
+  
+  <div class="tags">
+    <a href="/tags/正则表达式/">正则表达式</a>
+  </div>
+
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">留言</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div>
+  </div>
+  <div class="widget-wrapper">
+    <aside id="sidebar">
+  
+  
+    
+      
+      
+
+<div class="widget tag first">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/正则表达式/">正则表达式</a><small>3</small></li>
+  
+    <li><a href="/categories/编程学习/">编程学习</a><small>6</small></li>
+  
+    <li><a href="/categories/随笔/">随笔</a><small>8</small></li>
+  
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/正则表达式/">正则表达式</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/正则表达式/" style="font-size: NaNpx;">正则表达式</a>
+  </div>
+</div>
+
+    
+      
+      
+
+<div class="widget recent-posts first newline">
+  <h3 class="title">最近的文章</h3>
+  <ul class="entry">
+    
+      <li>
+        <a href="/2014/03/07/正则表达式入门3/">正则表达式入门（3）——重复匹配</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/07/正则表达式入门2/">正则表达式入门（2）——使用元字符</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/07/正则表达式入门1/">正则表达式入门（1）——基础：简单的匹配一组字符</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/07/unity获取网页源码/">unity获取网页源码</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/07/第一个软件和第一个游戏/">第一个软件和第一个游戏</a>
+      </li>
+    
+  </ul>
+</div>
+
+    
+      
+      
+
+<div class="widget blogroll">
+  <h3 class="title">友情链接</h3>
+  <ul class="entry">
+  
+    
+    <li><a href="http://heroicyang.com/" target="_blank">Heroic Yang&#39;s Blog</a></li>
+  
+  </ul>
+</div>
+
+    
+  
+</aside>
+<div class="clearfix"></div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">lvcloud</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+  var disqus_shortname = 'lvcloudgit';
+
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  }());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
