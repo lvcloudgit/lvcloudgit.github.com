@@ -46,6 +46,279 @@
   <header>
     
       <div class="icon"></div>
+      <time datetime="2014-03-13T13:12:11.000Z"><a href="/2014/03/13/event/">3月 13 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/13/event/">委托和事件（一）</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>委托、事件、Lambda表达式，下一个难关，准备开闯。</p>
+<h1 id="-">什么是委托？</h1>
+<p>委托是持有一个或多个方法的<strong>对象</strong>。所以，委托是可以<strong>执行</strong>的对象，当执行委托的时候，就是执行委托所<strong>持有的方法</strong>。</p>
+<h2 id="-">举个栗子</h2>
+<p>有主管和员工两个类，主管类里有个方法是<strong>扣钱</strong>，员工类里有个方法是<strong>偷懒</strong>，那么这个时候就可以创建一个委托，即员工一但<strong>偷懒</strong>，主管就执行<strong>扣钱</strong>。</p>
+<p>比如员工类这么写：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Employee
+{
+    <span class="keyword">private</span> <span class="keyword">int</span> salary; <span class="comment">//员工薪水</span>
+    <span class="keyword">private</span> Manager theManager; <span class="comment">//该员工的主管</span>
+    
+    <span class="comment">//构造函数，初始化员工薪水和实际主管</span>
+    <span class="keyword">public</span> <span class="title">Employee</span>(Manager manager)
+    {
+        theManager = manager;
+        salary = <span class="number">8000</span>;
+    }
+    
+    <span class="comment">//薪水属性</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> Salary
+    {
+        <span class="keyword">get</span>{ <span class="keyword">return</span> salary; }
+        <span class="keyword">set</span>{ salary = <span class="keyword">value</span>; }
+    }
+    
+    <span class="comment">//偷懒方法</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PlayGame</span>()
+    {
+        ConsoleWriteline(<span class="string">"员工开始玩游戏了..."</span>)；
+        theManager.RemoveMoney(<span class="keyword">this</span>);
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>下面是主管类：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Manager
+{
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RemoveMoney</span>(Employee employee)
+    {
+        ConsoleWriteline(<span class="string">"开始扣钱！"</span>);
+        
+        employee.Salary -= <span class="number">20</span>;
+        
+        ConsoleWriteline(<span class="string">"扣完钱了，还剩"</span> + employee.Salary);
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>Main方法可以这么写：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="keyword">string</span>[] args)
+{
+    Manager currentManager = <span class="keyword">new</span> Manager();
+    Employee currentWorker = <span class="keyword">new</span> Employee(currentManager);
+    
+    currentWorker.PlayGame();
+}
+</pre></td></tr></table></figure>
+
+<p>现在运行程序，可以很好的输出结果。但是，以上程序有些问题：</p>
+<ol>
+<li>必须先创建主管，然后才能创建员工，也就是说要创建有效的员工，必须先创建主管，耦合度太高了；</li>
+<li>如果功能需求发生变化，例如不是主管监督，而是经理监督，那么不但要增加经理类，而且要修改员工类。</li>
+</ol>
+<p>这个时候，可以考虑使用<strong>委托</strong>。可以理解为两步：</p>
+<p>第一步，首先要<strong>定义一个委托</strong>，即<strong>让主管监视员工</strong>；</p>
+<p>第二步，员工类里要有个事件（员工是激发该事件的对象），而这个事件由主管去执行。</p>
+<p>定义委托：</p>
+<p><code>public delegate void Play(Object Sender, System.EventArgs e)</code></p>
+<p>注意，这里声明的是一个<strong>委托类型</strong>，而不是委托对象。这个委托类型是一个<strong>事件</strong>。也可以将委托类型声明为其它类型，例如int等。比如：<code>delegate void MyDel(int value);</code></p>
+<p>员工类的定义：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Employee
+{
+    <span class="keyword">public</span> <span class="keyword">int</span> salary = <span class="number">8000</span>; <span class="comment">//省略属性</span>
+    <span class="keyword">public</span> <span class="keyword">event</span> Play play; <span class="comment">//创建事件对象</span>
+    
+    <span class="keyword">public</span> <span class="title">Employee</span>()
+    {
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">PlayGame</span>()
+    {
+        System.EventArgs e = <span class="keyword">new</span> EventArgs();
+        OnPlayGame(<span class="keyword">this</span>, e);
+    }
+    
+    <span class="keyword">void</span> OnPlayGame(<span class="keyword">object</span> Sender, EventArgs e)
+    {
+        <span class="keyword">if</span>(play != <span class="keyword">null</span>)
+        {
+            play(Sender, e);
+        }
+    }  
+}
+</pre></td></tr></table></figure>
+
+<p>主管类里要实现一个方法，这个方法与委托的返回值和参数一样（相同签名），给委托调用：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Manager
+{
+    <span class="keyword">public</span> <span class="title">Manager</span>()
+    {
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RemoveMoney</span>(Object Sender, System.EventArgs e)
+    {
+        Employee emp = Sender <span class="keyword">as</span> Employee;
+        emp.salary -= <span class="number">20</span>;
+        ConsoleWriteline(<span class="string">"扣钱后还剩"</span> + emp.salary);
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>调用方法：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Manager theManager = <span class="keyword">new</span> Manager();
+Employee theEmp = <span class="keyword">new</span> Employee();
+
+theEmployee.play += <span class="keyword">new</span> play(theManager.Removemoney);
+
+e.PlayGame();
+e.Playgame(); <span class="comment">//玩一次扣一次</span>
+</pre></td></tr></table></figure>
+
+<p>脑子不好使了，妈的，改天再琢磨，睡觉。</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+
+  <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <time datetime="2014-03-13T01:21:46.000Z"><a href="/2014/03/13/血色浪漫/">3月 13 2014</a></time>
+    
+    
+  
+    <h1 class="title"><a href="/2014/03/13/血色浪漫/">血色浪漫</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>尼玛！国产片的角色设定敢不敢稍微不那么脸谱一点？表演能不能稍微不那么话剧一点？剧情能不能稍微有一点点意料之外情理之中？想看点说中国话的好片真TM难啊！</p>
+<p><img src="http://gb.cri.cn/mmsource/images/2006/03/15/ew060315021.jpg" alt="血色浪漫"></p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+        <div class="alignleft">
+          <a href="/2014/03/13/血色浪漫/#more" class="more-link">Read More</a>
+        </div>
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+
+  <article class="post">
+  <header>
+    
+      <div class="icon"></div>
       <time datetime="2014-03-11T09:58:52.000Z"><a href="/2014/03/11/我们的八十年代/">3月 11 2014</a></time>
     
     
@@ -322,85 +595,6 @@ Unity的C#脚本跟一般的C#语言还是有点区别的，总得来说引擎�
 
 
 
-  <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <time datetime="2014-03-05T23:13:48.000Z"><a href="/2014/03/06/最简单的窗体传值/">3月 6 2014</a></time>
-    
-    
-  
-    <h1 class="title"><a href="/2014/03/06/最简单的窗体传值/">最简单的窗体传值</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>不同窗体之间传值也是个麻烦，试了很多方法都不理想，最后找到个最简单的方法，一般传值都够用了。</p>
-<p>在第一个窗口的事件中这么写：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>form2 f2 = <span class="keyword">new</span> form2();
-f2.Show(<span class="keyword">this</span>); <span class="comment">//将打开的窗体作为当前窗体的子物体</span>
-</pre></td></tr></table></figure>
-
-<p>在第二个窗口这么写：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>form1 f1 = (form1)this<span class="preprocessor">.owner</span><span class="comment">;</span>
-f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</span> =this<span class="preprocessor">.textBox</span>2<span class="preprocessor">.text</span><span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-<p>这样就把值传回去了。</p>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-
-  <article class="post">
-  <header>
-    
-      <div class="icon"></div>
-      <time datetime="2014-03-05T15:35:54.000Z"><a href="/2014/03/05/高原/">3月 5 2014</a></time>
-    
-    
-  
-    <h1 class="title"><a href="/2014/03/05/高原/">高原</a></h1>
-  
-
-  </header>
-  
-  <div class="entry">
-    
-      <p>猛的一震，把我从昏昏沉沉的状态惊醒过来。我觉得晕车药是假的，可能只是些劣质安眠药。从大巴车上下来，身体就像棉花一样，很难站稳。</p>
-
-    
-  </div>
-  <footer class="end-sep">
-    
-      
-        <div class="alignleft">
-          <a href="/2014/03/05/高原/#more" class="more-link">Read More</a>
-        </div>
-      
-      
-    
-    <div class="clearfix"></div>
-  </footer>
-</article>
-
-
-
 
 <nav id="pagination">
   
@@ -424,9 +618,9 @@ f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</s
   
     <li><a href="/categories/正则表达式/">正则表达式</a><small>3</small></li>
   
-    <li><a href="/categories/编程学习/">编程学习</a><small>6</small></li>
+    <li><a href="/categories/编程学习/">编程学习</a><small>7</small></li>
   
-    <li><a href="/categories/随笔/">随笔</a><small>11</small></li>
+    <li><a href="/categories/随笔/">随笔</a><small>12</small></li>
   
   </ul>
 </div>
@@ -438,6 +632,8 @@ f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</s
 <div class="widget tag">
   <h3 class="title">标签</h3>
   <ul class="entry">
+  
+    <li><a href="/tags/C#/">C#</a><small>1</small></li>
   
     <li><a href="/tags/正则表达式/">正则表达式</a><small>3</small></li>
   
@@ -451,7 +647,7 @@ f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</s
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/正则表达式/" style="font-size: NaNpx;">正则表达式</a>
+    <a href="/tags/C#/" style="font-size: 10.00px;">C#</a><a href="/tags/正则表达式/" style="font-size: 20.00px;">正则表达式</a>
   </div>
 </div>
 
@@ -464,6 +660,14 @@ f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</s
   <ul class="entry">
     
       <li>
+        <a href="/2014/03/13/event/">委托和事件（一）</a>
+      </li>
+    
+      <li>
+        <a href="/2014/03/13/血色浪漫/">血色浪漫</a>
+      </li>
+    
+      <li>
         <a href="/2014/03/11/我们的八十年代/">我们的八十年代</a>
       </li>
     
@@ -473,14 +677,6 @@ f1<span class="preprocessor">.textBox</span>1<span class="preprocessor">.text</s
     
       <li>
         <a href="/2014/03/08/头太大了/">头太大了</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/07/正则表达式入门3/">正则表达式入门（3）——重复匹配</a>
-      </li>
-    
-      <li>
-        <a href="/2014/03/07/正则表达式入门2/">正则表达式入门（2）——使用元字符</a>
       </li>
     
   </ul>
