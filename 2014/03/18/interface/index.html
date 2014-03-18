@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
-  <title>on the screen | Always lost</title>
+  <title>interface | Always lost</title>
   <meta name="author" content="lvcloud">
   
   <meta name="description" content="wasting life">
@@ -12,7 +12,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-  <meta property="og:title" content="on the screen"/>
+  <meta property="og:title" content="interface"/>
   <meta property="og:site_name" content="Always lost"/>
 
   <link rel="alternate" href="/atom.xml" title="Always lost" type="application/atom+xml">
@@ -45,23 +45,35 @@
   <header>
     
       <div class="icon"></div>
-      <time datetime="2014-03-04T12:28:48.000Z"><a href="/2014/03/04/on-the-screen/">3月 4 2014</a></time>
+      <time datetime="2014-03-18T01:49:24.000Z"><a href="/2014/03/18/interface/">3月 18 2014</a></time>
     
     
   
-    <h1 class="title">on the screen</h1>
+    <h1 class="title">interface</h1>
   
 
   </header>
   
   <div class="entry">
     
-      <p><img src="http://frontrowfeatures.com/wp-content/uploads/2013/06/jun24wilson02_hitn.jpg" alt="Ruth Wilson"></p>
-<p>英国女演员 Ruth Wilson，嘴长得太有个性了，不错。</p>
-<p><img src="http://img.poptower.com/pic-106088/clara-paget.jpg?d=1024" alt="Clara Paget"></p>
-<p>Clara Paget,异曲同工的嘴，但没有Ruth秀气。</p>
-<p><img src="http://www.jondi.fr/wp-content/uploads/2013/07/le_roi_et_l_oiseau_version_restauree.jpg" alt="Le Roi et l&#39;oiseau"></p>
-<p>小鸟！小鸟！注意！注意！有一个扫烟囱的小伙子和一个牧羊女……</p>
+      <p>终于对接口有了一点理解。其实是非常简单的概念，但为什么看了那么多书都搞不明白，回头想想，除了自己的智商有限以外，还有其它原因：</p>
+<ol>
+<li>大部分教程在讲解一个知识点的时候，都力求<strong>完整、准确、详尽</strong>，可是要本着这样的原则，没基础的话就很难看懂，可是有基础的话就不需要看入门教程；</li>
+<li>由于上一条理由，我发现介绍接口的教程通常从<strong>语法</strong>开始，或者会说<strong>接口是一种约定</strong>等等。虽然这些都没错，但这些都不是最容易理解的入口。</li>
+</ol>
+<a id="more"></a>
+
+<p>我觉得对于任何入门教程来说，都不应该求准、求全，那是中级教程或参考书的事，而应该以最容易听懂为基本诉求点。</p>
+<h2 id="-">接口的存在，其实就是为了解决不能多重继承的问题。</h2>
+<p>因为C++以后的OO语言都不允许多重继承，即一个子类只能继承自一个父类，所以有时候会不太方便。典型的情况是：</p>
+<p>例如，有两个父类：<strong>动物</strong>和<strong>机器</strong>，从<strong>动物</strong>派生出子类<strong>鹰</strong>，从<strong>机器</strong>派生出子类<strong>飞机</strong>，这个时候，如果要让<strong>鹰</strong>和<strong>飞机</strong>一起飞行，就是个麻烦。虽然可以在<strong>鹰</strong>和<strong>飞机</strong>这两个子类中各添加一个<strong>fly()</strong>方法，但是这两个子类毕竟分别属于两个不同的父类（除非推到object根上去），比如要创建飞行物体数组，就比较麻烦。</p>
+<p>这个时候可以创建一个<strong>IFly</strong>接口，让<strong>鹰</strong>和<strong>飞机</strong>都使用这个接口。根据接口的语法规则，继承了接口就必须实现接口中定义的所有方法，假设<strong>IFly</strong>接口中定义了一个<strong>flying()</strong>方法，那么<strong>鹰</strong>和<strong>飞机</strong>就都必须各自实现<strong>flying()</strong>方法。</p>
+<p>到这个时候为止，其实跟没有这个接口是一样的，就算不用这个接口，<strong>鹰</strong>和<strong>飞机</strong>也都有各自的<strong>flying()</strong>方法了，可以直接使用。那为什么非要用<strong>IFly</strong>接口呢？</p>
+<p>这就是为什么说<strong>接口是一种约定</strong>的原因。有了这个约定，编译器才能认为你在<strong>鹰</strong>和<strong>飞机</strong>中一定是实现了<strong>flying()</strong>方法，所以它允许你使用<strong>IFly[]</strong>这样的数组，里面可以放<strong>鹰</strong>或者飞机，然后统一调用它们各自的<strong>flying()</strong>方法。反过来说，如果没有这个约定，编译器就不确定<strong>鹰</strong>或者<strong>飞机</strong>中是不是有<strong>flying()</strong>方法，既然不确定这两个类中是不是都有相同的方法，当然不允许创建数组或者统一调用<strong>flying()</strong>方法，要用可以，<strong>各用各的，别想一起用</strong>。</p>
+<p>到这里，就不好理解了。<strong>各用各的</strong>好理解，就是可以用<code>eagle.flying();</code>，也可以用<code>plane.flying();</code>，但到底什么叫<strong>一起用</strong>呢？</p>
+<p>那是下一个话题了，总之有了<strong>接口</strong>这个<strong>约定</strong>，编译器就允许你做很多其它的事了。具体都能利用接口做什么，就涉及到很多其它功能和概念了。</p>
+<p>在理解接口的练习中，发现对类的继承理解还不够透彻，以后还要继续巩固。</p>
+<p>接下来要攻克的理解难关是<strong>委托和事件</strong>。</p>
 
     
   </div>
@@ -70,10 +82,15 @@
       
   
   <div class="categories">
-    <a href="/categories/随笔/">随笔</a>
+    <a href="/categories/编程学习/">编程学习</a>
   </div>
 
       
+  
+  <div class="tags">
+    <a href="/tags/C#/">C#</a>
+  </div>
+
     
     <div class="clearfix"></div>
   </footer>
